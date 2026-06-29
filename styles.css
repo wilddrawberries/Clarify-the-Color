@@ -472,6 +472,10 @@ h2 {
   background: rgba(255, 253, 248, 0.92);
 }
 
+.combined-mode .view-switch {
+  display: none;
+}
+
 .view-button {
   min-height: 32px;
   padding: 0 10px;
@@ -515,6 +519,61 @@ h2 {
   display: grid;
   min-height: auto;
   padding: 52px 12px 12px;
+}
+
+.combined-mode .workspace {
+  grid-template-columns: 240px minmax(440px, 1fr) 230px;
+}
+
+.combined-mode .net-panel {
+  display: grid;
+  place-items: stretch;
+  gap: 10px;
+  min-height: auto;
+  padding: 10px;
+}
+
+.combined-mode .network {
+  justify-self: center;
+  max-height: 250px;
+}
+
+.combined-mode .equation-view {
+  display: grid;
+  min-height: auto;
+  padding: 0;
+  align-items: stretch;
+}
+
+.combined-mode .living-equation {
+  min-height: auto;
+}
+
+.combined-mode #controlStack {
+  display: none;
+}
+
+.combined-mode .result-card {
+  margin-bottom: 10px;
+}
+
+.combined-mode.hidden-mode:not(.equation-mode) .workspace {
+  grid-template-columns: 240px minmax(440px, 1fr) 230px;
+  grid-template-areas: none;
+}
+
+.combined-mode.hidden-mode:not(.equation-mode) .target-panel,
+.combined-mode.hidden-mode:not(.equation-mode) .net-panel,
+.combined-mode.hidden-mode:not(.equation-mode) .controls {
+  grid-area: auto;
+}
+
+.combined-mode.hidden-mode:not(.equation-mode) .controls {
+  display: block;
+}
+
+.combined-mode.hidden-mode:not(.equation-mode) #controlStack {
+  display: none;
 }
 
 .living-equation {
@@ -601,6 +660,15 @@ h2 {
 .term-slider {
   width: min(116px, 9vw);
   accent-color: var(--term-color);
+}
+
+.term-control-label {
+  max-width: 120px;
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-weight: 900;
+  line-height: 1.05;
+  text-align: center;
 }
 
 .equation-term.negative {
@@ -1021,6 +1089,11 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .combined-mode .workspace,
+  .combined-mode.hidden-mode:not(.equation-mode) .workspace {
+    grid-template-columns: 1fr;
+  }
+
   .hidden-mode:not(.equation-mode) .workspace {
     grid-template-columns: 1fr;
     grid-template-areas:
@@ -1100,22 +1173,26 @@ h2 {
     display: none;
   }
 
+  .combined-mode #controlStack {
+    display: none;
+  }
+
   .controls {
-    order: 3;
+    order: 6;
     padding: 10px;
   }
 
   .test-panel {
-    order: 4;
+    order: 5;
     padding: 10px;
   }
 
   .target-panel {
-    order: 5;
+    order: 3;
   }
 
   .net-panel {
-    order: 6;
+    order: 4;
   }
 
   .result-card {
@@ -1159,14 +1236,20 @@ h2 {
     grid-template-columns: 1fr;
   }
 
+  .combined-mode.hidden-mode #controlStack {
+    display: none;
+  }
+
   .hidden-mode .controls {
     display: grid;
     grid-template-columns: 1fr;
     gap: 8px;
+    min-width: 0;
   }
 
   .control-group {
     margin-bottom: 0;
+    min-width: 0;
   }
 
   .control-group-body {
@@ -1216,31 +1299,30 @@ h2 {
   }
 
   .test-grid {
-    grid-template-columns: repeat(var(--test-count, 6), minmax(54px, 1fr));
-    gap: 5px;
-    overflow-x: auto;
-    padding: 2px 2px 4px;
-    scrollbar-width: thin;
+    grid-template-columns: repeat(auto-fit, minmax(96px, 1fr));
+    gap: 8px;
+    overflow: visible;
+    padding: 2px;
   }
 
   .test-card {
-    grid-template-rows: 104px auto;
-    min-width: 54px;
+    grid-template-rows: 112px auto;
+    min-width: 0;
   }
 
   .bar-stage {
-    min-height: 104px;
-    padding: 0 4px 5px;
+    min-height: 112px;
+    padding: 0 6px 6px;
   }
 
   .signal-fill {
-    width: min(100%, 58px);
+    width: min(100%, 72px);
   }
 
   .test-tab {
-    gap: 3px;
-    min-height: 78px;
-    padding: 6px 4px 8px;
+    gap: 4px;
+    min-height: 88px;
+    padding: 7px 5px 8px;
     border-width: 3px;
   }
 
@@ -1250,11 +1332,11 @@ h2 {
 
   .test-card strong,
   .test-card span {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
   }
 
   .test-card .prediction {
-    display: none;
+    display: block;
   }
 
   .target-panel,
@@ -1271,9 +1353,16 @@ h2 {
     max-height: 300px;
   }
 
+  .hidden-mode .network {
+    max-height: 250px;
+  }
+
+  .combined-mode .network {
+    max-height: 240px;
+  }
+
   .view-switch {
-    top: 8px;
-    right: 8px;
+    display: none;
   }
 
   .equation-view {
@@ -1281,16 +1370,30 @@ h2 {
     min-height: 230px;
   }
 
+  .combined-mode .equation-view {
+    padding: 0;
+    min-height: auto;
+  }
+
   .living-equation {
     gap: 7px;
     min-height: 165px;
     padding: 10px;
     max-width: 100%;
+    min-width: 0;
     overflow-wrap: anywhere;
+  }
+
+  .hidden-mode .living-equation {
+    justify-content: flex-start;
+    gap: 5px;
+    min-height: auto;
+    overflow-x: hidden;
   }
 
   .equation-term {
     font-size: 0.95rem;
+    min-width: 0;
   }
 
   .term-letter {
@@ -1307,6 +1410,19 @@ h2 {
 
   .term-slider {
     width: 62px;
+  }
+
+  .term-control-label {
+    max-width: 72px;
+    font-size: 0.58rem;
+  }
+
+  .hidden-mode .term-slider {
+    width: 54px;
+  }
+
+  .hidden-mode .term-control-label {
+    max-width: 58px;
   }
 
   .operator {
@@ -1332,6 +1448,11 @@ h2 {
 
   .target-panel {
     grid-template-columns: 1fr;
+  }
+
+  .test-grid {
+    grid-template-columns: repeat(auto-fit, minmax(86px, 1fr));
+    gap: 7px;
   }
 
   .target-swatch {
