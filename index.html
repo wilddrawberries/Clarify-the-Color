@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clarify the Color</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="app">
+      <section class="topbar" aria-label="Color puzzle">
+        <div>
+          <p class="kicker">Neural color puzzle</p>
+          <h1>Clarify the Color</h1>
+        </div>
+        <div class="top-actions">
+          <div class="day-pill" id="dayLabel">Day</div>
+          <button class="info-button" id="infoButton" type="button" aria-label="How to play">!?</button>
+        </div>
+      </section>
+
+      <section class="source-panel" aria-label="Puzzle source">
+        <div class="source-switch">
+          <button class="source-button active" type="button" data-source="daily">Daily</button>
+          <button class="source-button" type="button" data-source="random">Random</button>
+          <button class="source-button" type="button" data-source="custom">Custom</button>
+        </div>
+        <div class="source-tools">
+          <button class="source-action" id="randomButton" type="button" hidden>Roll color</button>
+          <div class="custom-controls" id="customControls" hidden>
+            <input class="color-picker" id="customColor" type="color" value="#000000" aria-label="Custom color">
+            <label class="rgb-field">R <input id="customR" type="number" min="0" max="255" value="0"></label>
+            <label class="rgb-field">G <input id="customG" type="number" min="0" max="255" value="0"></label>
+            <label class="rgb-field">B <input id="customB" type="number" min="0" max="255" value="0"></label>
+          </div>
+        </div>
+      </section>
+
+      <section class="mode-switch" aria-label="Mode">
+        <button class="mode-button active" id="perceptronMode" type="button" data-mode="perceptron">Single perceptron</button>
+        <button class="mode-button" id="hiddenMode" type="button" data-mode="hidden">Two hidden nodes</button>
+      </section>
+
+      <section class="workspace">
+        <div class="target-panel">
+          <div class="target-swatch" id="targetSwatch" aria-label="Today's color"></div>
+          <div class="target-copy">
+            <p class="panel-label" id="targetLabel">Today's color</p>
+            <h2 class="rgb-display" id="targetRgb">rgb(0, 0, 0)</h2>
+            <p id="targetHex">#000000</p>
+          </div>
+        </div>
+
+        <section class="net-panel" aria-label="Neural network">
+          <div class="view-switch" id="viewSwitch" aria-label="Perceptron view">
+            <button class="view-button active" type="button" data-view="network">Nodes</button>
+            <button class="view-button" type="button" data-view="equation">Equation</button>
+          </div>
+          <svg class="network" viewBox="0 0 680 350" role="img" aria-labelledby="networkTitle">
+            <title id="networkTitle">A neural network with red, green, blue, and bias inputs connected to one output node.</title>
+            <defs>
+              <linearGradient id="wireGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#f97316"></stop>
+                <stop offset="55%" stop-color="#2dd4bf"></stop>
+                <stop offset="100%" stop-color="#6366f1"></stop>
+              </linearGradient>
+            </defs>
+            <line class="wire" id="wireR" x1="120" y1="70" x2="485" y2="175"></line>
+            <line class="wire" id="wireG" x1="120" y1="145" x2="485" y2="175"></line>
+            <line class="wire" id="wireB" x1="120" y1="220" x2="485" y2="175"></line>
+            <line class="wire" id="wireBias" x1="120" y1="295" x2="485" y2="175"></line>
+
+            <g id="hiddenWires">
+              <line class="wire hidden-wire" id="wireRA" x1="120" y1="70" x2="330" y2="125"></line>
+              <line class="wire hidden-wire" id="wireGA" x1="120" y1="145" x2="330" y2="125"></line>
+              <line class="wire hidden-wire" id="wireBA" x1="120" y1="220" x2="330" y2="125"></line>
+              <line class="wire hidden-wire" id="wireBiasA" x1="120" y1="295" x2="330" y2="125"></line>
+              <line class="wire hidden-wire" id="wireRB" x1="120" y1="70" x2="330" y2="225"></line>
+              <line class="wire hidden-wire" id="wireGB" x1="120" y1="145" x2="330" y2="225"></line>
+              <line class="wire hidden-wire" id="wireBB" x1="120" y1="220" x2="330" y2="225"></line>
+              <line class="wire hidden-wire" id="wireBiasB" x1="120" y1="295" x2="330" y2="225"></line>
+              <line class="wire hidden-wire" id="wireAOut" x1="330" y1="125" x2="520" y2="175"></line>
+              <line class="wire hidden-wire" id="wireBOut" x1="330" y1="225" x2="520" y2="175"></line>
+            </g>
+
+            <g class="node input red">
+              <circle cx="120" cy="70" r="38"></circle>
+              <text x="120" y="76">R</text>
+            </g>
+            <g class="node input green">
+              <circle cx="120" cy="145" r="38"></circle>
+              <text x="120" y="151">G</text>
+            </g>
+            <g class="node input blue">
+              <circle cx="120" cy="220" r="38"></circle>
+              <text x="120" y="226">B</text>
+            </g>
+            <g class="node input bias">
+              <circle cx="120" cy="295" r="38"></circle>
+              <text x="120" y="301">+1</text>
+            </g>
+
+            <g id="hiddenNodes">
+              <g class="node hidden-node">
+                <circle cx="330" cy="125" r="38"></circle>
+                <text x="330" y="131">H1</text>
+              </g>
+              <g class="node hidden-node">
+                <circle cx="330" cy="225" r="40"></circle>
+                <text x="330" y="231">H2</text>
+              </g>
+            </g>
+
+            <g class="node output" id="outputNode">
+              <circle cx="520" cy="175" r="58"></circle>
+              <text class="output-question" x="520" y="174">IS COLOR?</text>
+              <text class="output-value" id="nodeOutput" x="520" y="204">NO (0)</text>
+            </g>
+          </svg>
+          <div class="equation-view" id="equationView" aria-label="Linear algebra view">
+            <div class="equation-stack" id="equationStack"></div>
+          </div>
+        </section>
+
+        <aside class="controls" aria-label="Weights">
+          <div class="result-card" id="resultCard">
+            <p class="panel-label">Is color?</p>
+            <div class="answer-row">
+              <strong id="answerValue">NO (0)</strong>
+              <span id="confidenceValue">0%</span>
+            </div>
+            <p id="scoreFormula">sum = 0.00</p>
+          </div>
+
+          <div id="controlStack"></div>
+          <button class="ghost-button" id="resetButton" type="button">Reset weights</button>
+        </aside>
+      </section>
+
+      <section class="test-panel" aria-label="Auto test">
+        <div class="section-head">
+          <div>
+            <p class="panel-label">Test results</p>
+            <h2 class="test-title" id="testTitle">
+              <span>TODAY</span>
+              <em>vs</em>
+              <span>RGB + B&amp;W</span>
+            </h2>
+          </div>
+          <div class="status-chip" id="passChip">0 / 9 passing</div>
+        </div>
+        <div class="test-grid" id="testGrid"></div>
+      </section>
+    </main>
+
+    <div class="info-modal" id="infoModal" hidden>
+      <button class="info-backdrop" id="infoBackdrop" type="button" aria-label="Close walkthrough"></button>
+      <section class="info-card" role="dialog" aria-modal="true" aria-labelledby="infoTitle">
+        <div class="info-head">
+          <h2 id="infoTitle">How it works</h2>
+          <button class="info-close" id="infoClose" type="button" aria-label="Close walkthrough">x</button>
+        </div>
+        <ol>
+          <li>Pick Daily, Random, or Custom to set the target color.</li>
+          <li>Move the weight knobs until the output says YES for that color.</li>
+          <li>Use the auto test to make the same network says NO for the comparison colors.</li>
+          <li>When every test passes, the *Color is Clarified*</li>
+        </ol>
+      </section>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
