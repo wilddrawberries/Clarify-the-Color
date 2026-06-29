@@ -223,10 +223,12 @@ const els = {
 
 let sourceMode = "daily";
 let activeMode = "perceptron";
-let activeView = "network";
+let activeView = "combined";
 let activeTests = [];
 let sliders = {};
 let outputs = {};
+
+document.body.classList.add("combined-mode");
 
 function dayNumber(date = new Date()) {
   const start = new Date(Date.UTC(2026, 0, 1));
@@ -865,6 +867,7 @@ function termHtml(className, key, term, controlKey) {
         <span class="term-input">${input}</span>
       </span>
       <input class="term-slider" type="range" min="${control.min}" max="${control.max}" step="${control.step}" value="${term.weight}">
+      <span class="term-control-label">${control.label}</span>
     </span>
   `;
 }
@@ -911,10 +914,10 @@ function updateResultChip(key, value) {
 }
 
 function setView(view) {
-  activeView = view;
-  document.body.classList.toggle("equation-mode", activeView === "equation");
+  activeView = "combined";
+  document.body.classList.remove("equation-mode");
   els.viewButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.view === activeView);
+    button.classList.toggle("active", false);
   });
 }
 
