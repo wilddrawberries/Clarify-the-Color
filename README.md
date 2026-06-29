@@ -42,41 +42,10 @@ Then open:
 http://localhost:8000
 ```
 
-## Optional Color Pool Tool
-
-The included generator can create a precomputed playable color list and a swatch sheet:
-
-```powershell
-node generate-playable-colors.js 400
-```
-
-This writes:
-
-- `playable-colors.generated.txt`
-- `playable-colors.generated.swatches.html`
-
-The current app does not require this file to run.
-
-## Host on GitHub Pages
-
-1. Create a new GitHub repository.
-2. Upload or commit these project files to the repository root:
-   - `index.html`
-   - `styles.css`
-   - `script.js`
-   - `README.md`
-3. In GitHub, open the repository settings.
-4. Go to **Pages**.
-5. Under **Build and deployment**, choose:
-   - Source: **Deploy from a branch**
-   - Branch: `main`
-   - Folder: `/root`
-6. Save.
-
-GitHub will publish the site at:
+Also access via GitHub:
 
 ```text
-https://YOUR-USERNAME.github.io/YOUR-REPOSITORY-NAME/
+https://wilddrawberries.github.io/Clarify-the-Color/
 ```
 
 It can take a minute or two for the first deploy to appear.
